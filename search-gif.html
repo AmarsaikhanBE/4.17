@@ -19,27 +19,23 @@
     <div id="result"></div>
     <script>
         const APIKEY = '8XRgnL92S99BMf3kuAwDU1p1Us8ENnWp';
-        document.addEventListener('DOMContentLoaded', init);
-
-        function init() {
-            searchBtn.addEventListener('click', ev => {
-                ev.preventDefault();
-                let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=25&q=`;
-                let str = searchGif.value.trim();
-                url = url.concat(str)
-                fetch(url)
-                    .then(res => res.json())
-                    .then(posts => {
-                        const arr = posts.data
-                        console.log(arr)
-                        for (let i = 0; i < arr.length; i++) {
-                            const img = document.createElement('img')
-                            img.setAttribute('src', arr[i].images.original.url)
-                            result.append(img)
-                        }
-                    })
-            })
-        }
+        searchBtn.addEventListener('click', () => {
+            result.innerHTML = ''
+            let url = `https://api.giphy.com/v1/gifs/search?api_key=${APIKEY}&limit=10&offset=0&rating=g&lang=en&q=`;
+            let str = searchGif.value.trim();
+            url = url.concat(str)
+            fetch(url)
+                .then(res => res.json())
+                .then(posts => {
+                    const arr = posts.data
+                    for (let i = 0; i < arr.length; i++) {
+                        const img = document.createElement('img')
+                        img.setAttribute('src', arr[i].images.original.url)
+                        result.append(img)
+                    }
+                })
+        })
+        searchGif.addEventListener('keypress', (event) => event.keyCode == 13 ? searchBtn.click() : console.log(event.keyCode))
     </script>
 
 </body>
